@@ -1,0 +1,9 @@
+# Visual Studio 2013/2017
+*.sdf
+*.suo
+*.opensdf
+*.user
+
+Debug/
+Release/
+.vs/
