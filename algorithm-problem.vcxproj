@@ -20,7 +20,7 @@
     <ProjectGuid>{85886D94-4B38-45FC-8737-EDC01FCFD75C}</ProjectGuid>
     <RootNamespace>algorithmproblem</RootNamespace>
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
