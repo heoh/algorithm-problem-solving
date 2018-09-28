@@ -13,10 +13,12 @@
   <ItemGroup>
     <ClCompile Include="src\*.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{85886D94-4B38-45FC-8737-EDC01FCFD75C}</ProjectGuid>
     <RootNamespace>algorithmproblem</RootNamespace>
-    
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
