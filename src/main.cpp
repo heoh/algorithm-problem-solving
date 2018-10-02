@@ -1,7 +1,5 @@
 #include <cstdio>
-#include <queue>
-#include <functional>
-using namespace std;
+#include <malloc.h>
 
 class State {
 public:
@@ -31,6 +29,92 @@ public:
 	}
 };
 
+template <typename T, typename Comparator>
+class PriorityQueue {
+private:
+	T* elements;
+	int nElements;
+	Comparator compare;
+
+private:
+	void swap(T& a, T& b) {
+		T tmp = a;
+		a = b;
+		b = tmp;
+	}
+
+	void stabilizeUp(int node) {
+		int child = node;
+		while (child > 1) {
+			int parent = child / 2;
+			if (compare(elements[child], elements[parent])) {
+				break;
+			}
+			
+			swap(elements[child], elements[parent]);
+			child = parent;
+		}
+	}
+
+	void stabilizeDown(int node) {
+		int parent = node;
+		while (parent < nElements) {
+			int left = parent * 2;
+			int right = left + 1;
+
+			bool hasLeft = (left <= nElements);
+			bool hasRight = (right <= nElements);
+			if (!hasLeft) {
+				break;
+			}
+
+			int child = left;
+			if (hasRight) {
+				child = (compare(elements[left], elements[right])) ? right : left;
+			}
+
+			if (compare(elements[child], elements[parent])) {
+				break;
+			}
+
+			swap(elements[child], elements[parent]);
+			parent = child;
+		}
+	}
+
+public:
+	PriorityQueue(int capacity) {
+		elements = (T*)malloc(sizeof(T) * (capacity + 1));
+		nElements = 0;
+	}
+
+	~PriorityQueue() {
+		free(elements);
+	}
+
+	const T& top() {
+		return elements[1];
+	}
+
+	void push(const T& val) {
+		nElements += 1;
+		elements[nElements] = val;
+
+		stabilizeUp(nElements);
+	}
+
+	void pop() {
+		elements[1] = elements[nElements];
+		nElements -= 1;
+
+		stabilizeDown(1);
+	}
+
+	bool empty() {
+		return nElements == 0;
+	}
+};
+
 int T;
 int N;
 int Map[100][100];
@@ -54,7 +138,7 @@ int solve() {
 		}
 	}
 
-	priority_queue<State, vector<State>, StateComparator > states;
+	PriorityQueue<State, StateComparator> states(10000);
 
 	visited[0][0] = true;
 	states.push(State(0, 0, 0));
