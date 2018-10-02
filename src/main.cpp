@@ -1,6 +1,4 @@
 #include <cstdio>
-#include <algorithm>
-using namespace std;
 
 #define ABS(x) ((x < 0) ? -x : x)
 
@@ -182,8 +180,7 @@ int solve() {
 	static Collision collisions[200000];
 
 	int nCollisions = initCollisions(collisions);
-	//quickSort(collisions, 0, nCollisions - 1);
-	sort(collisions, collisions + nCollisions, acompare);
+	quickSort(collisions, 0, nCollisions - 1);
 
 	int sum = 0;
 
