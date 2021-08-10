@@ -1,19 +1,52 @@
 #include <string>
 #include <vector>
-#include <algorithm>
+#include <cstring>
 
 using namespace std;
 
-bool solution(vector<string> phone_book) {
-    sort(phone_book.begin(), phone_book.end());
+class Trie {
+public:
+    Trie* nodes[10];
+    bool isBranchNode;
+    bool isTerminalNode;
 
-    for (int i = 1; i < phone_book.size(); i++) {
-        string& prev = phone_book[i - 1];
-        string& cur = phone_book[i];
-        if (prev == cur.substr(0, prev.size())) {
+    Trie() {
+        memset(nodes, 0, sizeof(nodes));
+        isBranchNode = false;
+        isTerminalNode = false;
+    }
+
+    ~Trie() {
+        for (auto node : nodes) {
+            if (node) delete node;
+        }
+    }
+
+    bool checkValidationAndAdd(string numbers) {
+        if (numbers == "") isTerminalNode = true;
+        else isBranchNode = true;
+
+        if (isTerminalNode && isBranchNode)
+            return false;
+        if (isTerminalNode)
+            return true;
+
+        char i = numbers[0] - '0';
+
+        if (!nodes[i])
+            nodes[i] = new Trie();
+
+        return nodes[i]->checkValidationAndAdd(numbers.substr(1, numbers.size()));
+    }
+};
+
+bool solution(vector<string> phone_book) {
+    Trie trie;
+
+    for (auto phoneNumber : phone_book) {
+        if (!trie.checkValidationAndAdd(phoneNumber)) {
             return false;
         }
     }
-    
     return true;
 }
