@@ -4,47 +4,45 @@
 
 using namespace std;
 
+const int MAX_PHONE_BOOK_LEN = 1000000;
+const int MAX_PHONE_NUMBER_LEN = 20;
+
+class Trie;
+Trie* newTrie();
+
 class Trie {
 public:
     Trie* nodes[10];
     bool isBranchNode;
     bool isTerminalNode;
 
-    Trie() {
-        memset(nodes, 0, sizeof(nodes));
-        isBranchNode = false;
-        isTerminalNode = false;
-    }
-
-    ~Trie() {
-        for (auto node : nodes) {
-            if (node) delete node;
-        }
-    }
-
-    bool checkValidationAndAdd(string numbers) {
-        if (numbers == "") isTerminalNode = true;
+    bool checkValidationAndAdd(const char* s, int len) {
+        if (len == 0) isTerminalNode = true;
         else isBranchNode = true;
 
-        if (isTerminalNode && isBranchNode)
-            return false;
-        if (isTerminalNode)
-            return true;
+        if (isTerminalNode) return !isBranchNode;
 
-        char i = numbers[0] - '0';
+        char i = *s - '0';
 
         if (!nodes[i])
-            nodes[i] = new Trie();
+            nodes[i] = newTrie();
 
-        return nodes[i]->checkValidationAndAdd(numbers.substr(1, numbers.size()));
+        return nodes[i]->checkValidationAndAdd(s + 1, len - 1);
     }
 };
 
+Trie nodes[MAX_PHONE_BOOK_LEN * MAX_PHONE_NUMBER_LEN + 1];
+int nNodes = 0;
+
+Trie* newTrie() {
+    return &(nodes[nNodes++]);
+}
+
 bool solution(vector<string> phone_book) {
-    Trie trie;
+    Trie* trie = newTrie();
 
     for (auto phoneNumber : phone_book) {
-        if (!trie.checkValidationAndAdd(phoneNumber)) {
+        if (!trie->checkValidationAndAdd(phoneNumber.c_str(), phoneNumber.size())) {
             return false;
         }
     }
